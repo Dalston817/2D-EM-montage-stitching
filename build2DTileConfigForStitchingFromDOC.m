@@ -56,4 +56,4 @@ fprintf(outFID, '%s\n', outString);
 fclose(outFID);
 %% Wrote succesfully, write info
 fprintf('INFO::Wrote tile configuration successfully:\n');
-disp(outString)
+disp(outString);
