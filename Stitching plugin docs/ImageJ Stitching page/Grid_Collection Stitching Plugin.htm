@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Grid/Collection Stitching Plugin</title>
+        <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3">
+    <meta content="ImageJ Wiki" property="og:site_name">
+    <meta content="Grid/Collection Stitching Plugin" property="og:title">
+    <meta content="article" property="og:type">
+    <meta content="The Grid/Collection stitching plugin reconstructs big images/stacks from tiled input images/stacks, optimizing for the best overlap. It is part of the Image Stitching plugin suite." property="og:description">
+    <meta content="https://imagej.github.io/plugins/grid-collection-stitching" property="og:url">
+    <meta content="https://imagej.github.io/media/icons/imagej2.png" property="og:image">
+    <meta content="Registration" property="article:section">
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="https://imagej.net/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://imagej.net/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://imagej.net/favicon-16x16.png">
+    <link rel="manifest" href="https://imagej.net/site.webmanifest">
+    <link rel="mask-icon" href="https://imagej.net/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <style class="anchorjs"></style><link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/lightbox.min.css">
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/algolia-min.css">
+    <script type="text/javascript" src="Grid_Collection%20Stitching%20Plugin_files/dygraph.min.js"></script>
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/dygraph.min.css">
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/main.css">
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/layout.css">
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/includes.css">
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/dock.css">
+    <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="Grid_Collection%20Stitching%20Plugin_files/page.css">
+  </head>
+  <body class="">
+    <!-- Top bar -->
+    <section id="top-bar">
+  <a href="https://imagej.net/"><img id="site-logo" src="Grid_Collection%20Stitching%20Plugin_files/imagej2.png"></a>
+  <div id="search-panel">
+    <div id="search-box"><div class="ais-SearchBox"><form action="" role="search" class="ais-SearchBox-form" novalidate=""><input class="ais-SearchBox-input" type="search" placeholder="" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="512"><button class="ais-SearchBox-submit" type="submit" title="Submit the search query."><svg class="ais-SearchBox-submitIcon" width="10" height="10" viewBox="0 0 40 40"> <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"></path> </svg></button><button class="ais-SearchBox-reset" type="reset" title="Clear the search query." hidden=""><svg class="ais-SearchBox-resetIcon" viewBox="0 0 20 20" width="10" height="10"> <path d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"></path> </svg></button><span class="ais-SearchBox-loadingIndicator" hidden=""><svg class="ais-SearchBox-loadingIcon" width="16" height="16" viewBox="0 0 38 38" stroke="#444"> <g fill="none" fillrule="evenodd"> <g transform="translate(1 1)" strokewidth="2"> <circle strokeopacity=".5" cx="18" cy="18" r="18"></circle> <path d="M36 18c0-9.94-8.06-18-18-18"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"></animateTransform> </path> </g> </g> </svg></span></form></div></div>
+  </div>
+</section>
+
+    <!-- Page-info -->
+    <div class="page-info"> 
+  <a href="https://github.com/imagej/imagej.github.io/commits/main/_pages/plugins/grid-collection-stitching.md">Page history</a>
+  <a href="https://github.com/imagej/imagej.github.io/edit/main/_pages/plugins/grid-collection-stitching.md">Edit this page</a>
+  <a href="https://imagej.net/editing">How do I edit this website?</a></div>
+
+    <section id="left-column" class="sidebar dock">
+      <!-- Menu -->
+      <div class="menu dockable">
+        <div class="drag-handle"></div><h3>ImageJ Docs</h3>
+        <ul>
+          <li><a href="https://imagej.net/downloads">Download</a></li>
+
+          <li><details><summary>Learn</summary><ul>
+            <li><details><summary><a href="https://imagej.net/learn">ImageJ Basics</a></summary><ul>
+              <li><a href="https://imagej.net/tutorials">Tutorials</a></li>
+              <li><a href="https://imagej.net/learn/user-guides">User Guides</a></li>
+              <li><a href="https://imagej.net/learn/keyboard-shortcuts">Keyboard Shortcuts</a></li>
+              <li><a href="https://imagej.net/learn/tips-and-tricks">Tips and Tricks</a></li>
+              <li><a href="https://imagej.net/learn/troubleshooting">Troubleshooting</a></li>
+              <li><a href="https://imagej.net/learn/faq">Frequently Asked Questions</a></li>
+
+              <li><details><summary><a href="https://imagej.net/platforms">Supported Platforms</a></summary><ul>
+                <li><a href="https://imagej.net/platforms/windows">Windows</a></li>
+                <li><a href="https://imagej.net/platforms/macos">MacOS</a></li>
+                <li><a href="https://imagej.net/platforms/linux">Linux</a></li>
+                <li><a href="https://imagej.net/platforms/pi">Raspberry Pi</a></li>
+                <li><a href="https://imagej.net/platforms/android">Android</a></li>
+              </ul></details></li> <!-- Learn/ImageJ Basics/Supported Platforms -->
+
+              <li><details><summary><a href="https://imagej.net/formats">File Formats</a></summary><ul>
+                <li><a href="https://imagej.net/formats/bio-formats">Bio-Formats</a></li>
+                <li><a href="https://imagej.net/formats/video">Video formats</a></li>
+                <li><a href="https://imagej.net/formats/quicktime">QuickTime</a></li>
+                <li><a href="https://imagej.net/formats/tiff">TIFF</a></li>
+                <li><a href="https://imagej.net/formats/pdf">PDF</a></li>
+                <li><a href="https://imagej.net/formats/dicom">DICOM</a></li>
+                <li><a href="https://imagej.net/formats/lsm">Zeiss LSM</a></li>
+                <li><a href="https://imagej.net/formats/olympus">Olympus VSI</a></li>
+                <li><a href="https://imagej.net/formats/lurawave">Opera Flex</a></li>
+                <li><a href="https://imagej.net/formats/fib-sem">FIB-SEM</a></li>
+              </ul></details></li> <!-- Learn/ImageJ Basics/File Formats -->
+            </ul></details></li> <!-- Learn/ImageJ -->
+
+            <li><details><summary><a href="https://imagej.net/imaging">Scientific Imaging</a></summary><ul>
+              <li><a href="https://imagej.net/imaging/principles">Principles of Scientific Imaging</a></li>
+              <li><a href="https://imagej.net/imaging/annotating-images">Annotating Images</a></li>
+              <li><a href="https://imagej.net/imaging/colocalization-analysis">Colocalization</a></li>
+              <li><a href="https://imagej.net/imaging/color-image-processing">Color Image Processing</a></li>
+              <li><a href="https://imagej.net/imaging/deconvolution">Deconvolution</a></li>
+              <li><a href="https://imagej.net/imaging/image-intensity-processing">Image Intensity Processing</a></li>
+              <li><a href="https://imagej.net/imaging/particle-analysis">Particle Analysis</a></li>
+              <li><a href="https://imagej.net/imaging/registration">Registration</a></li>
+              <li><a href="https://imagej.net/imaging/segmentation">Segmentation</a></li>
+              <li><a href="https://imagej.net/imaging/stack-slice-manipulations">Stack-slice Manipulations</a></li>
+              <li><a href="https://imagej.net/imaging/t-functions">T-functions</a></li>
+              <li><a href="https://imagej.net/imaging/tracking">Tracking</a></li>
+              <li><a href="https://imagej.net/imaging/visualization">Visualization</a></li>
+              <li><a href="https://imagej.net/imaging/z-functions">Z-functions</a></li>
+            </ul></details></li> <!-- Learn/Scientific Imaging -->
+          </ul></details></li> <!-- Learn -->
+
+          <li><details><summary><a href="https://imagej.net/plugins">Extend</a></summary><ul>
+            <li><a href="https://imagej.net/list-of-extensions">List of Extensions</a></li>
+
+            <li><details><summary><a href="https://imagej.net/update-sites">Update Sites</a></summary><ul>
+              <li><a href="https://imagej.net/list-of-update-sites">List of Update Sites</a></li>
+              <li><a href="https://imagej.net/update-sites/following">Following an Update Site</a></li>
+              <li><a href="https://imagej.net/update-sites/setup">Creating an Update Site</a></li>
+              <li><a href="https://imagej.net/update-sites/tos">Terms of Service</a></li>
+              <li><a href="https://imagej.net/update-sites/automatic-uploads">Automatic Upload</a></li>
+              <li><a href="https://imagej.net/update-sites/core-uploads">Uploading to Core Sites</a></li>
+              <li><a href="https://imagej.net/update-sites/faq">Update Sites FAQ</a></li>
+              <li><a href="https://imagej.net/update-sites/stats">Statistics</a></li>
+            </ul></details></li> <!-- Extend/Update Sites -->
+
+            <li><details><summary><a href="https://imagej.net/scripting">Scripting</a></summary><ul>
+              <li><a href="https://imagej.net/scripting/basics">Scripting Basics</a></li>
+              <li><a href="https://imagej.net/scripting/script-editor">Script Editor</a></li>
+              <li><a href="https://imagej.net/scripting/parameters">Parameters</a></li>
+              <li><a href="https://imagej.net/scripting/user-input">User Input</a></li>
+              <li><a href="https://imagej.net/scripting/auto-imports">Auto Import</a></li>
+              <li><a href="https://imagej.net/scripting/templates">Templates</a></li>
+              <li><a href="https://imagej.net/scripting/batch">Batch Processing</a></li>
+              <li><a href="https://imagej.net/scripting/headless">Running Headlessly</a></li>
+              <li><a href="https://imagej.net/scripting/comparisons">Scripting Comparisons</a></li>
+              <li><a href="https://imagej.net/scripting/toolbox">Toolbox</a></li>
+
+              <li><details><summary>Languages</summary><ul>
+                <li><a href="https://imagej.net/scripting/beanshell">BeanShell Scripting</a></li>
+                <li><a href="https://imagej.net/scripting/groovy">Groovy Scripting</a></li>
+                <li><a href="https://imagej.net/scripting/macro">ImageJ Macro</a></li>
+                <li><a href="https://imagej.net/scripting/javascript">JavaScript</a></li>
+                <li><a href="https://imagej.net/scripting/clojure">Lisp (Clojure)</a></li>
+                <li><a href="https://imagej.net/scripting/matlab">MATLAB</a></li>
+                <li><a href="https://imagej.net/scripting/jython">Python (Jython)</a></li>
+                <li><a href="https://imagej.net/scripting/python">Python (native)</a></li>
+                <li><a href="https://imagej.net/scripting/renjin">R (Renjin)</a></li>
+                <li><a href="https://imagej.net/scripting/jruby">Ruby (JRuby)</a></li>
+                <li><a href="https://imagej.net/scripting/scala">Scala Scripting</a></li>
+              </ul></details></li> <!-- Extend/Scripting/Languages -->
+            </ul></details></li> <!-- Extend/Scripting -->
+
+            <li><details><summary><a href="https://imagej.net/develop">Development</a></summary><ul>
+              <li><a href="https://imagej.net/develop/philosophy">Philosophy</a></li>
+              <li><a href="https://imagej.net/develop/architecture">Architecture</a></li>
+              <li><a href="https://imagej.net/develop/source">Source code</a></li>
+              <li><a href="https://imagej.net/develop/project-management">Project management</a></li>
+              <li><a href="https://imagej.net/develop/coding-style">Coding style</a></li>
+              <li><a href="https://imagej.net/develop/javadoc">Using Javadoc</a></li>
+              <li><a href="https://imagej.net/develop/debugging">Debugging</a></li>
+              <li><a href="https://imagej.net/develop/wish-list">Wish list</a></li>
+
+              <li><details><summary>Tools</summary><ul>
+                <li><a href="https://imagej.net/develop/github">GitHub</a></li>
+                <li><a href="https://imagej.net/develop/maven">Maven</a></li>
+                <li><a href="https://imagej.net/develop/ci">CI/CD</a></li>
+                <li><a href="https://imagej.net/develop/dotfiles">Dotfiles</a></li>
+
+                <li><details><summary><a href="https://imagej.net/develop/ides">IDEs</a></summary><ul>
+                  <li><a href="https://imagej.net/develop/eclipse">Eclipse</a></li>
+                  <li><a href="https://imagej.net/develop/netbeans">NetBeans</a></li>
+                  <li><a href="https://imagej.net/develop/intellij">IntelliJ IDEA</a></li>
+                  <li><a href="https://imagej.net/develop/command-line">Command Line</a></li>
+                </ul></details></li>
+              </ul></details></li> <!-- Extend/Development/Tools -->
+
+              <li><details><summary>Guides</summary><ul>
+                <li><a href="https://imagej.net/develop/plugins">Writing plugins</a></li>
+                <li><a href="https://imagej.net/develop/improving-the-code">Contributing to a plugin</a></li>
+                <li><a href="https://imagej.net/develop/releasing">Development lifecycle</a></li>
+                <li><a href="https://imagej.net/develop/building-a-pom">Building a POM</a></li>
+                <li><a href="https://imagej.net/develop/debugging-exercises">Hands-on debugging</a></li>
+                <li><a href="https://imagej.net/develop/writing-ops">Adding new ops</a></li>
+                <li><a href="https://imagej.net/develop/formats">Adding new formats</a></li>
+                <li><a href="https://imagej.net/develop/native-libraries">Using native libraries</a></li>
+                <li><a href="https://imagej.net/develop/tips">Tips for developers</a></li>
+                <li><a href="https://imagej.net/develop/cpp-tips">Tips for C++ developers</a></li>
+                <li><a href="https://imagej.net/develop/ij1-plugins">ImageJ 1.x plugins</a></li>
+                <li><a href="https://imagej.net/develop/versioning">Versioning</a></li>
+                <li><a href="https://imagej.net/develop/logging">Logging</a></li>
+                <li><a href="https://imagej.net/develop/uber-jars">Uber-JARs</a></li>
+              </ul></details></li> <!-- Extend/Development/Guides -->
+
+              <li><details><summary><a href="https://imagej.net/develop/git">Git</a></summary><ul>
+                <li><a href="https://imagej.net/develop/git/eclipse">Git in Eclipse (EGit)</a></li>
+                <li><a href="https://imagej.net/develop/git/mini-howto">Git mini howto</a></li>
+                <li><a href="https://imagej.net/develop/git/workshop">Git workshop</a></li>
+                <li><a href="https://imagej.net/develop/git/conflicts">Git conflicts</a></li>
+                <li><a href="https://imagej.net/develop/git/topic-branches">Git topic branches</a></li>
+                <li><a href="https://imagej.net/develop/git/notes">Git notes</a></li>
+                <li><a href="https://imagej.net/develop/git/reflogs">Git reflogs</a></li>
+                <li><a href="https://imagej.net/develop/git/submodules">Git submodules</a></li>
+                <li><a href="https://imagej.net/develop/git/pinpoint-regressions">How to pinpoint regressions</a></li>
+                <li><a href="https://imagej.net/develop/git/publish-a-repository">How to publish a git repository</a></li>
+                <li><a href="https://imagej.net/develop/git/extract-a-subproject">How to extract a subproject</a></li>
+              </ul></details></li> <!-- Extend/Development/Git -->
+            </ul></details></li> <!-- Extend/Development -->
+          </ul></details></li> <!-- Extend -->
+
+          <li><details><summary><a href="https://imagej.net/contribute">Contribute</a></summary><ul>
+            <li><a href="https://imagej.net/contribute/citing">Citing</a></li>
+            <li><a href="https://imagej.net/people">Contributors</a></li>
+            <li><a href="https://imagej.net/orgs">Organizations</a></li>
+            <li><a href="https://imagej.net/contribute/governance">Governance</a></li>
+            <li><a href="https://imagej.net/contribute/funding">Funding</a></li>
+            <li><a href="https://imagej.net/contribute/fiji">Contributing to Fiji</a></li>
+
+            <li><details><summary><a href="https://imagej.net/licensing">Licensing</a></summary><ul>
+              <li><details><summary><a href="https://imagej.net/licensing/open-source">Open Source</a></summary><ul>
+                <li><a href="https://imagej.net/licensing/apache">Apache</a></li>
+                <li><a href="https://imagej.net/licensing/bsd">BSD</a></li>
+                <li><a href="https://imagej.net/licensing/epl">EPL</a></li>
+                <li><a href="https://imagej.net/licensing/gpl">GPL</a></li>
+                <li><a href="https://imagej.net/licensing/lgpl">LGPL</a></li>
+                <li><a href="https://imagej.net/licensing/mit">MIT</a></li>
+                <li><a href="https://imagej.net/licensing/public-domain">Public domain</a></li>
+                <li><a href="https://imagej.net/licensing/big">BIG</a></li>
+              </ul></details></li> <!-- Contribute/Licensing/Open Source -->
+
+              <li><a href="https://imagej.net/licensing/closed-source">Proprietary</a></li>
+            </ul></details></li> <!-- Contribute/Licensing -->
+
+            <li><details><summary><a href="https://imagej.net/editing">Editing the Wiki</a></summary><ul>
+              <li><a href="https://imagej.net/editing/advanced">Advanced Editing</a></li>
+              <li><a href="https://imagej.net/editing/buttons">Buttons</a></li>
+              <li><a href="https://imagej.net/editing/citations">Citations</a></li>
+              <li><a href="https://imagej.net/editing/code">Source Code</a></li>
+              <li><a href="https://imagej.net/editing/debugging">Debugging</a></li>
+              <li><a href="https://imagej.net/editing/headers">Headers</a></li>
+              <li><a href="https://imagej.net/editing/icons">Icons</a></li>
+              <li><a href="https://imagej.net/editing/images">Images</a></li>
+              <li><a href="https://imagej.net/editing/keys">Keyboard Shortcuts</a></li>
+              <li><a href="https://imagej.net/editing/linking">Linking</a></li>
+              <li><a href="https://imagej.net/editing/math">Math Expressions</a></li>
+              <li><a href="https://imagej.net/editing/menu-paths">Menu Paths</a></li>
+              <li><a href="https://imagej.net/editing/navigation">Navigation</a></li>
+              <li><a href="https://imagej.net/editing/notices">Notices</a></li>
+              <li><a href="https://imagej.net/editing/people">People</a></li>
+              <li><a href="https://imagej.net/editing/pitfalls">Pitfalls</a></li>
+              <li><a href="https://imagej.net/editing/quizzes">Quizzes</a></li>
+              <li><a href="https://imagej.net/editing/statbox">Statbox</a></li>
+              <li><a href="https://imagej.net/editing/symbols">Symbols</a></li>
+              <li><a href="https://imagej.net/editing/tables">Tables</a></li>
+              <li><a href="https://imagej.net/editing/tooltips">Tooltips</a></li>
+              <li><a href="https://imagej.net/editing/videos">Videos</a></li>
+              <li><a href="https://imagej.net/editing/whitespace">Whitespace</a></li>
+            </ul></details></li> <!-- Contribute/Editing the Wiki -->
+          </ul></details></li> <!-- Contribute -->
+
+          <li><details><summary><a href="https://imagej.net/discuss">Discuss</a></summary><ul>
+            <li><a href="https://imagej.net/discuss/bugs">Reporting Issues</a></li>
+            <li><a href="https://imagej.net/discuss/mailing-lists">Mailing Lists</a></li>
+            <li><a href="https://imagej.net/discuss/chat">Chat</a></li>
+          </ul></details></li> <!-- Discuss -->
+
+          <li><details><summary>Explore</summary><ul>
+            <li><a href="https://imagej.net/news">News</a></li>
+
+            <li><details><summary><a href="https://imagej.net/events">Events</a></summary><ul>
+              <li><a href="https://imagej.net/events/presentations">Presentations</a></li>
+              <li><a href="https://imagej.net/events/conferences">Conferences</a></li>
+              <li><a href="https://imagej.net/events/hackathons">Hackathons</a></li>
+              <li><a href="https://imagej.net/events">More...</a></li>
+            </ul></details></li> <!-- Discuss/Events -->
+
+            <li><details><summary><a href="https://imagej.net/libs">Libraries</a></summary><ul>
+              <li><a href="https://imagej.net/libs/imagej-ops">ImageJ Ops</a></li>
+              <li><a href="https://imagej.net/libs/imagej-common">ImageJ Common</a></li>
+              <li><a href="https://imagej.net/libs/imagej-legacy">ImageJ Legacy</a></li>
+              <li><a href="https://imagej.net/libs/scijava">SciJava</a></li>
+              <li><a href="https://imagej.net/libs/scifio">SCIFIO</a></li>
+
+              <li><details><summary><a href="https://imagej.net/libs/imglib2">ImgLib2</a></summary><ul>
+                <li><a href="https://imagej.net/libs/imglib2/getting-started">Getting Started</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/accessors">Accessors</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/accessibles">Accessibles</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/examples">Examples</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/workshop-introductory">Introductory Workshop</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/workshop-advanced">Advanced Workshop</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/matlab">ImgLib2 images in MATLAB</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/benchmarks">Benchmarks</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/faq">FAQ</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/developing">Developing ImgLib2</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/discussion">ImgLib2 Discussion</a></li>
+              </ul></details></li> <!-- Explore/Libraries/ImgLib2 -->
+              
+              <li><a href="https://imagej.net/libs">More...</a></li>
+            </ul></details></li> <!-- Explore/Libraries -->
+
+            <li><details><summary><a href="https://imagej.net/software">Software</a></summary><ul>
+              <li><a href="https://imagej.net/software/nih-image">NIH Image</a></li>
+              <li><a href="https://imagej.net/software/imagej">ImageJ</a></li>
+              <li><a href="https://imagej.net/software/imagej2">ImageJ2</a></li>
+              <li><a href="https://imagej.net/software/fiji">Fiji</a></li>
+              <li><a href="https://imagej.net/software">More...</a></li>
+            </ul></details></li> <!-- Explore/Software -->
+          </ul></details></li> <!-- Explore -->
+        </ul>
+      </div>
+    </section>
+
+    <section id="right-column" class="sidebar dock">
+      <!-- Vital stats -->
+      <script src="Grid_Collection%20Stitching%20Plugin_files/maven.js"></script>
+<script>
+function refreshComponent() {
+  var statboxName = document.getElementById('statbox-name');
+  if (statboxName) statboxName.innerHTML = 'Reloading...';
+  fillStatsFromArtifact('sc.fiji:Stitching_', '');
+}
+refreshComponent();
+</script><div id="statbox" class="dockable" style="position: relative;">
+<h3>Vital statistics</h3>
+<div class="drag-handle"></div>
+<button class="btn-refresh" onclick="refreshComponent()"><i class="fa fa-sync" style="pointer-events: none;"></i></button>
+<table><tbody><tr><td id="statbox-header" colspan="2"><p id="statbox-image"><img src="Grid_Collection%20Stitching%20Plugin_files/plugin.png"></p>
+<p id="statbox-name">Stitching</p></td></tr><tr><th>Source</th>
+    <td id="component-source"><a href="https://github.com/fiji/Stitching">on GitHub</a></td></tr><tr><th>License</th>
+    <td id="component-license"><a href="http://www.gnu.org/licenses/gpl.html">GPLv2+</a></td></tr><tr><th>Release</th>
+    <td id="component-release"><a href="https://maven.scijava.org/index.html#nexus-search;gav~sc.fiji~Stitching_~3.1.9~~~kw,versionexpand">3.1.9</a></td></tr><tr><th>Date</th>
+    <td id="component-date">Thu, 22 Sep 2022<br>22:46:21 GMT</td></tr><tr><th>Development status</th>
+    <td id="component-dev-status"><span class="tooltip">Active<span class="tooltiptext" style="left: -90px; bottom: 1.5em; width: 180px">New features are being actively developed. API breakages are kept as limited as possible.</span></span></td></tr><tr><th>Support status</th>
+    <td id="component-support-status"><span class="tooltip">Active<span class="tooltiptext" style="left: -90px; bottom: 1.5em; width: 180px">Someone
+ will respond to questions on community channels, and addresses issue 
+reports in the project's issue tracker. A best effort is made to fix 
+reported bugs within a reasonable time frame.</span></span></td></tr><tr><td id="component-team" colspan="2">
+      <details>
+        <summary style="text-align: center"><span class="tooltip">Team<span class="tooltiptext" style="top: 80%; left: -75px; width: 180px">The group of people who take responsibility for the project.</span></span></summary>
+        <table><tbody><tr><th><span class="tooltip">Founders<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People who created the project. Does not imply any current participation or responsibility.</span></span></th><td id="component-team-founders"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Leads<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People responsible for making decisions about the project: timing of releases, inclusion of features, etc.</span></span></th><td id="component-team-leads"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Developers<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People responsible for adding new features or enhancements.</span></span></th><td id="component-team-developers"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Debuggers<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People responsible for fixing bugs.</span></span></th><td id="component-team-debuggers"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li><li><a class="person" href="https://imagej.net/User:Rueden">Curtis Rueden</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Reviewers<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People responsible for reviewing patch submissions.</span></span></th><td id="component-team-reviewers"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Support<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People responsible for responding to community questions and issue reports.</span></span></th><td id="component-team-support"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li><li><a class="person" href="https://imagej.net/User:Rueden">Curtis Rueden</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Maintainers<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People responsible for maintaining the project: e.g., merging patch submissions and cutting releases.</span></span></th><td id="component-team-maintainers"><ul><li><a class="person" href="https://imagej.net/User:StephanP">Stephan Preibisch</a></li><li><a class="person" href="https://imagej.net/User:Rueden">Curtis Rueden</a></li></ul></td>
+  </tr><tr><th><span class="tooltip">Contributors<span class="tooltiptext" style="top: 80%; left: -10px; width: 180px">People who contributed code to the project. Does not imply any current participation or responsibility.</span></span></th><td id="component-team-contributors"><ul><li><a class="person" href="https://imagej.net/User:Schindelin">Johannes Schindelin</a></li><li><a class="person" href="https://imagej.net/User:Iarganda">Ignacio Arganda-Carreras</a></li><li><a class="person" href="https://imagej.net/User:Ehrenfeu">Niko Ehrenfeuchter</a></li><li><a class="person" href="https://imagej.net/User:Hinerm">Mark Hiner</a></li><li><a class="person" href="https://imagej.net/User:Ksmader">Kevin Mader</a></li><li><a class="person" href="https://imagej.net/User:Saalfeld">Stephan Saalfeld</a></li><li><span class="person">John Lapage</span></li></ul></td>
+  </tr></tbody></table>
+      </details>
+</td></tr></tbody></table>
+</div>
+
+      <!-- Table of contents -->
+      <div id="toc" class="toc menu dockable">
+        <div class="drag-handle"></div>
+        <h3>Page contents</h3>
+        <ul data-toc="#content" data-toc-headings="h1,h2,h3,h4,h5,h6"><li><a href="#what-is-gridcollection-stitching">What is Grid/Collection Stitching?</a></li><li><a href="#how-to-use-the-gridcollection-stitching-plugin">How to use the Grid/Collection Stitching plugin</a></li><li><details><summary><a href="#troubleshooting-with-the-gridcollection-stitching-plugin">Troubleshooting with the Grid/Collection Stitching plugin</a></summary><ul><li><a href="#inversion-of-coordinates">Inversion of Coordinates</a></li><li><details><summary><a href="#speed">Speed</a></summary><ul><li><a href="#memory-allocation">Memory Allocation</a></li><li><a href="#image-dimensions">Image Dimensions</a></li></ul></details></li><li><a href="#memory">Memory</a></li></ul></details></li><li><a href="#other-pitfalls">Other Pitfalls</a></li></ul>
+      </div>
+    </section>
+
+    <!-- Page title -->
+    <div class="container">
+      <header class="major special">
+        <a class="project-icon shadowed-box" href="https://imagej.net/software/fiji"><span class="tooltip"><img src="Grid_Collection%20Stitching%20Plugin_files/fiji.svg"><span class="tooltiptext" style="top: 80%; left: 25%; width: 20em">This page describes content relating to the Fiji distribution of ImageJ. Click the logo for details.</span></span></a>
+        <h1>Grid/Collection Stitching Plugin</h1>
+        <span class="project-counterweight"> </span>
+      </header>
+    </div>
+
+    <!-- Nav bar -->
+    
+
+    <!-- Main content -->
+    <section id="page" class="main style1">
+      <div class="container">
+        <div class="box alt"></div>
+        <div id="content" class="page-content">
+          
+          <h2 id="what-is-gridcollection-stitching">What is Grid/Collection Stitching?<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#what-is-gridcollection-stitching" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+
+<p>When a large biological specimen must be pictured in high resolution,
+ it must be done in tiles as the entire thing could not fit into the 
+field view of the microscope. Once the entire specimen has been imaged, 
+the tiles must be fit or stitched together to form one coherent image. 
+Some overlap will be present between each tile and its neighbors to 
+verify its location in the image.</p>
+
+<p>The Grid/Collection stitching plugin allows several tiles placed in varying dimensions to be stitched together.</p>
+
+<p>See also the <a href="https://imagej.net/plugins/image-stitching">Image Stitching</a> page.</p>
+
+<h2 id="how-to-use-the-gridcollection-stitching-plugin">How to use the Grid/Collection Stitching plugin<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#how-to-use-the-gridcollection-stitching-plugin" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+
+<ul>
+  <li>Launch the stitching plugin from the menu item <span class="bc"><span>Plugins</span> › <span>Stitching</span> › <span>Grid/Collection stitching</span></span></li>
+  <li>In the plugin’s graphical user interface (GUI), choose the 
+position type as Positions from file from the first dropbox menu. Then 
+choose the order as Defined by image metadata. With this choice, the 
+images within your file do not need to be in any particular order. Click
+ ok.</li>
+  <li>When a second GUI appears, select a file from your dataset.
+    <ul>
+      <li>If Prairie was used for data collection, ensure that the file selected is a .xml or .cfg</li>
+    </ul>
+  </li>
+  <li>Select a fusion method.
+    <ul>
+      <li>Linear blending will obscure the seams between tiles, but will
+ take a longer amount of time. Without it, tile lines will be clearly 
+seen if the image is to be blown up. To save time, only use linear 
+blending for presentation pieces.
+        <ul>
+          <li>To learn about other fusion methods, please visit the <a href="https://imagej.net/plugins/image-stitching#pairwise-stitching">Stitching</a> page.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>if Prairie or WiscScan are used, uncheck “compute overlap.” Both softwares calculate fairly accurate coordinates beforehand.</li>
+  <li>Reduce “Increase overlap” to 0 and uncheck subpixel accuracy</li>
+  <li>If the data computed is too large for computer memory, check “use 
+virtual memory.” This will be considerably slower, but will save RAM
+    <ul>
+      <li>Alternatively, <a href="#memory-allocation">more memory can be allocated</a> to the Fiji operation</li>
+    </ul>
+  </li>
+  <li>Click ok and the images will begin to be stitched together.</li>
+</ul>
+
+<h2 id="troubleshooting-with-the-gridcollection-stitching-plugin">Troubleshooting with the Grid/Collection Stitching plugin<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#troubleshooting-with-the-gridcollection-stitching-plugin" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+
+<h3 id="inversion-of-coordinates">Inversion of Coordinates<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#inversion-of-coordinates" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
+
+<p>Certain data sets have caused an inversion of coordinates when 
+stitched together. The plugin is unable to discern the inversion without
+ human intervention. After stitching, if the output image appears 
+incorrect, redo the stitch. Depending on which axis the image has been 
+inverted upon(the user will need to know this) select the corresponding 
+option within the second dialog box. This will invert the selected 
+coordinates before stitching the image create the correct image.</p>
+
+<h3 id="speed">Speed<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#speed" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
+
+<h4 id="memory-allocation">Memory Allocation<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#memory-allocation" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h4>
+
+<p>If “use virtual memory” has been selected but the stitching plugin is
+ still taking a considerable amount of time, try allocating more memory 
+to the process.</p>
+
+<ul>
+  <li>Open Memory from the menu item <span class="bc"><span>Edit</span> › <span>Options</span> › <span>Memory &amp; Threads</span></span></li>
+  <li>Enter the amount of memory you would like to be allocated to the Fiji application in megabytes
+    <ul>
+      <li>Check the amount of installed RAM on your computer to ensure you do not try to allocate more memory than exists.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="image-dimensions">Image Dimensions<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#image-dimensions" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h4>
+
+<p>Another speed reduction will occur if the tiles used have varying z 
+coordinates. This will cause the stitching program to include tiles of 
+black space wherever a tile has a z coordinate less than the maximum z 
+coordinate within the file. To check if this could be a problem with 
+your dataset, use the menu title to access <span class="bc"><span>Plugins</span> › <span>Stitching</span> › <span>Visualize Tiles</span></span>.
+ If the computed image does NOT show up as one large square with a 
+patchwork of squares, your data set has varying z-values. To alleviate 
+the slower speeds, select “ignore Z position” within the second GUI.</p>
+
+<h3 id="memory">Memory<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#memory" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h3>
+
+<div class="thumbnail">
+    <a href="https://imagej.net/media/out-of-memory.png" data-lightbox="image-out-of-memory-png">
+        <span class="thumbnail-group"><img src="Grid_Collection%20Stitching%20Plugin_files/out-of-memory.png" width="380"></span>
+    </a>
+    <span>Out of memory error message.</span>
+</div>
+
+<p>Even using virtual memory with maximum memory allocation can still be
+ too much for some computers to handle, especially given the size of 
+larger image files. The limited amount of memory available to most 
+computers means that during the stitching of a large image file, the 
+plugin will be trying to store more pixels within memory than there is 
+space for. When this event occurs, Fiji will either stall and need to be
+ force closed, or will display the message “&lt;Out of Memory&gt;.” To 
+fix this issue, select “Downsampling” in the Stitching GUI to allow for 
+the image to be stitched in pieces. Please see the <a href="https://imagej.net/tutorials/downsample">Downsampling</a> page for more information.</p>
+
+<h2 id="other-pitfalls">Other Pitfalls<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#other-pitfalls" style="font: 1em / 1 anchorjs-icons; margin-left: 0.1875em; padding-right: 0.1875em; padding-left: 0.1875em;"></a></h2>
+
+<div class="thumbnail">
+    <a href="https://imagej.net/media/plugins/z-variance.png" data-lightbox="image-z-variance-png">
+        <span class="thumbnail-group"><img src="Grid_Collection%20Stitching%20Plugin_files/z-variance.png" width="380"></span>
+    </a>
+    <span>Example of a dataset with z-variance.</span>
+</div>
+
+<p>Please see the <a href="https://imagej.net/plugins/image-stitching">Image Stitching</a> page for other precautions.</p>
+
+<div style="clear: both;"></div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <section id="footer">
+  <ul class="icons">
+    <li><a href="https://forum.image.sc/tag/imagej" class="icon alt"><img src="Grid_Collection%20Stitching%20Plugin_files/image-sc.png" width="24" style="vertical-align: middle; margin-top: -10px"><span class="label">Forum</span></a></li>
+
+    <li><a href="https://twitter.com/hashtag/ImageJ" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+    <li><a href="https://github.com/imagej" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+  </ul>
+  <ul class="copyright">
+    <li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
+  </ul>
+</section>
+
+    <!-- Hamburger menu -->
+        <nav role="navigation">
+      <div id="ham-toggle">
+        <input type="checkbox">
+        <span></span> <!-- top bun -->
+        <span></span> <!-- hamburger -->
+        <span></span> <!-- bottom bun -->
+        <ul id="ham-menu">
+          <div class="menu"><h3>ImageJ Docs</h3>
+        <ul>
+          <li><a href="https://imagej.net/downloads">Download</a></li>
+
+          <li><details><summary>Learn</summary><ul>
+            <li><details><summary><a href="https://imagej.net/learn">ImageJ Basics</a></summary><ul>
+              <li><a href="https://imagej.net/tutorials">Tutorials</a></li>
+              <li><a href="https://imagej.net/learn/user-guides">User Guides</a></li>
+              <li><a href="https://imagej.net/learn/keyboard-shortcuts">Keyboard Shortcuts</a></li>
+              <li><a href="https://imagej.net/learn/tips-and-tricks">Tips and Tricks</a></li>
+              <li><a href="https://imagej.net/learn/troubleshooting">Troubleshooting</a></li>
+              <li><a href="https://imagej.net/learn/faq">Frequently Asked Questions</a></li>
+
+              <li><details><summary><a href="https://imagej.net/platforms">Supported Platforms</a></summary><ul>
+                <li><a href="https://imagej.net/platforms/windows">Windows</a></li>
+                <li><a href="https://imagej.net/platforms/macos">MacOS</a></li>
+                <li><a href="https://imagej.net/platforms/linux">Linux</a></li>
+                <li><a href="https://imagej.net/platforms/pi">Raspberry Pi</a></li>
+                <li><a href="https://imagej.net/platforms/android">Android</a></li>
+              </ul></details></li> <!-- Learn/ImageJ Basics/Supported Platforms -->
+
+              <li><details><summary><a href="https://imagej.net/formats">File Formats</a></summary><ul>
+                <li><a href="https://imagej.net/formats/bio-formats">Bio-Formats</a></li>
+                <li><a href="https://imagej.net/formats/video">Video formats</a></li>
+                <li><a href="https://imagej.net/formats/quicktime">QuickTime</a></li>
+                <li><a href="https://imagej.net/formats/tiff">TIFF</a></li>
+                <li><a href="https://imagej.net/formats/pdf">PDF</a></li>
+                <li><a href="https://imagej.net/formats/dicom">DICOM</a></li>
+                <li><a href="https://imagej.net/formats/lsm">Zeiss LSM</a></li>
+                <li><a href="https://imagej.net/formats/olympus">Olympus VSI</a></li>
+                <li><a href="https://imagej.net/formats/lurawave">Opera Flex</a></li>
+                <li><a href="https://imagej.net/formats/fib-sem">FIB-SEM</a></li>
+              </ul></details></li> <!-- Learn/ImageJ Basics/File Formats -->
+            </ul></details></li> <!-- Learn/ImageJ -->
+
+            <li><details><summary><a href="https://imagej.net/imaging">Scientific Imaging</a></summary><ul>
+              <li><a href="https://imagej.net/imaging/principles">Principles of Scientific Imaging</a></li>
+              <li><a href="https://imagej.net/imaging/annotating-images">Annotating Images</a></li>
+              <li><a href="https://imagej.net/imaging/colocalization-analysis">Colocalization</a></li>
+              <li><a href="https://imagej.net/imaging/color-image-processing">Color Image Processing</a></li>
+              <li><a href="https://imagej.net/imaging/deconvolution">Deconvolution</a></li>
+              <li><a href="https://imagej.net/imaging/image-intensity-processing">Image Intensity Processing</a></li>
+              <li><a href="https://imagej.net/imaging/particle-analysis">Particle Analysis</a></li>
+              <li><a href="https://imagej.net/imaging/registration">Registration</a></li>
+              <li><a href="https://imagej.net/imaging/segmentation">Segmentation</a></li>
+              <li><a href="https://imagej.net/imaging/stack-slice-manipulations">Stack-slice Manipulations</a></li>
+              <li><a href="https://imagej.net/imaging/t-functions">T-functions</a></li>
+              <li><a href="https://imagej.net/imaging/tracking">Tracking</a></li>
+              <li><a href="https://imagej.net/imaging/visualization">Visualization</a></li>
+              <li><a href="https://imagej.net/imaging/z-functions">Z-functions</a></li>
+            </ul></details></li> <!-- Learn/Scientific Imaging -->
+          </ul></details></li> <!-- Learn -->
+
+          <li><details><summary><a href="https://imagej.net/plugins">Extend</a></summary><ul>
+            <li><a href="https://imagej.net/list-of-extensions">List of Extensions</a></li>
+
+            <li><details><summary><a href="https://imagej.net/update-sites">Update Sites</a></summary><ul>
+              <li><a href="https://imagej.net/list-of-update-sites">List of Update Sites</a></li>
+              <li><a href="https://imagej.net/update-sites/following">Following an Update Site</a></li>
+              <li><a href="https://imagej.net/update-sites/setup">Creating an Update Site</a></li>
+              <li><a href="https://imagej.net/update-sites/tos">Terms of Service</a></li>
+              <li><a href="https://imagej.net/update-sites/automatic-uploads">Automatic Upload</a></li>
+              <li><a href="https://imagej.net/update-sites/core-uploads">Uploading to Core Sites</a></li>
+              <li><a href="https://imagej.net/update-sites/faq">Update Sites FAQ</a></li>
+              <li><a href="https://imagej.net/update-sites/stats">Statistics</a></li>
+            </ul></details></li> <!-- Extend/Update Sites -->
+
+            <li><details><summary><a href="https://imagej.net/scripting">Scripting</a></summary><ul>
+              <li><a href="https://imagej.net/scripting/basics">Scripting Basics</a></li>
+              <li><a href="https://imagej.net/scripting/script-editor">Script Editor</a></li>
+              <li><a href="https://imagej.net/scripting/parameters">Parameters</a></li>
+              <li><a href="https://imagej.net/scripting/user-input">User Input</a></li>
+              <li><a href="https://imagej.net/scripting/auto-imports">Auto Import</a></li>
+              <li><a href="https://imagej.net/scripting/templates">Templates</a></li>
+              <li><a href="https://imagej.net/scripting/batch">Batch Processing</a></li>
+              <li><a href="https://imagej.net/scripting/headless">Running Headlessly</a></li>
+              <li><a href="https://imagej.net/scripting/comparisons">Scripting Comparisons</a></li>
+              <li><a href="https://imagej.net/scripting/toolbox">Toolbox</a></li>
+
+              <li><details><summary>Languages</summary><ul>
+                <li><a href="https://imagej.net/scripting/beanshell">BeanShell Scripting</a></li>
+                <li><a href="https://imagej.net/scripting/groovy">Groovy Scripting</a></li>
+                <li><a href="https://imagej.net/scripting/macro">ImageJ Macro</a></li>
+                <li><a href="https://imagej.net/scripting/javascript">JavaScript</a></li>
+                <li><a href="https://imagej.net/scripting/clojure">Lisp (Clojure)</a></li>
+                <li><a href="https://imagej.net/scripting/matlab">MATLAB</a></li>
+                <li><a href="https://imagej.net/scripting/jython">Python (Jython)</a></li>
+                <li><a href="https://imagej.net/scripting/python">Python (native)</a></li>
+                <li><a href="https://imagej.net/scripting/renjin">R (Renjin)</a></li>
+                <li><a href="https://imagej.net/scripting/jruby">Ruby (JRuby)</a></li>
+                <li><a href="https://imagej.net/scripting/scala">Scala Scripting</a></li>
+              </ul></details></li> <!-- Extend/Scripting/Languages -->
+            </ul></details></li> <!-- Extend/Scripting -->
+
+            <li><details><summary><a href="https://imagej.net/develop">Development</a></summary><ul>
+              <li><a href="https://imagej.net/develop/philosophy">Philosophy</a></li>
+              <li><a href="https://imagej.net/develop/architecture">Architecture</a></li>
+              <li><a href="https://imagej.net/develop/source">Source code</a></li>
+              <li><a href="https://imagej.net/develop/project-management">Project management</a></li>
+              <li><a href="https://imagej.net/develop/coding-style">Coding style</a></li>
+              <li><a href="https://imagej.net/develop/javadoc">Using Javadoc</a></li>
+              <li><a href="https://imagej.net/develop/debugging">Debugging</a></li>
+              <li><a href="https://imagej.net/develop/wish-list">Wish list</a></li>
+
+              <li><details><summary>Tools</summary><ul>
+                <li><a href="https://imagej.net/develop/github">GitHub</a></li>
+                <li><a href="https://imagej.net/develop/maven">Maven</a></li>
+                <li><a href="https://imagej.net/develop/ci">CI/CD</a></li>
+                <li><a href="https://imagej.net/develop/dotfiles">Dotfiles</a></li>
+
+                <li><details><summary><a href="https://imagej.net/develop/ides">IDEs</a></summary><ul>
+                  <li><a href="https://imagej.net/develop/eclipse">Eclipse</a></li>
+                  <li><a href="https://imagej.net/develop/netbeans">NetBeans</a></li>
+                  <li><a href="https://imagej.net/develop/intellij">IntelliJ IDEA</a></li>
+                  <li><a href="https://imagej.net/develop/command-line">Command Line</a></li>
+                </ul></details></li>
+              </ul></details></li> <!-- Extend/Development/Tools -->
+
+              <li><details><summary>Guides</summary><ul>
+                <li><a href="https://imagej.net/develop/plugins">Writing plugins</a></li>
+                <li><a href="https://imagej.net/develop/improving-the-code">Contributing to a plugin</a></li>
+                <li><a href="https://imagej.net/develop/releasing">Development lifecycle</a></li>
+                <li><a href="https://imagej.net/develop/building-a-pom">Building a POM</a></li>
+                <li><a href="https://imagej.net/develop/debugging-exercises">Hands-on debugging</a></li>
+                <li><a href="https://imagej.net/develop/writing-ops">Adding new ops</a></li>
+                <li><a href="https://imagej.net/develop/formats">Adding new formats</a></li>
+                <li><a href="https://imagej.net/develop/native-libraries">Using native libraries</a></li>
+                <li><a href="https://imagej.net/develop/tips">Tips for developers</a></li>
+                <li><a href="https://imagej.net/develop/cpp-tips">Tips for C++ developers</a></li>
+                <li><a href="https://imagej.net/develop/ij1-plugins">ImageJ 1.x plugins</a></li>
+                <li><a href="https://imagej.net/develop/versioning">Versioning</a></li>
+                <li><a href="https://imagej.net/develop/logging">Logging</a></li>
+                <li><a href="https://imagej.net/develop/uber-jars">Uber-JARs</a></li>
+              </ul></details></li> <!-- Extend/Development/Guides -->
+
+              <li><details><summary><a href="https://imagej.net/develop/git">Git</a></summary><ul>
+                <li><a href="https://imagej.net/develop/git/eclipse">Git in Eclipse (EGit)</a></li>
+                <li><a href="https://imagej.net/develop/git/mini-howto">Git mini howto</a></li>
+                <li><a href="https://imagej.net/develop/git/workshop">Git workshop</a></li>
+                <li><a href="https://imagej.net/develop/git/conflicts">Git conflicts</a></li>
+                <li><a href="https://imagej.net/develop/git/topic-branches">Git topic branches</a></li>
+                <li><a href="https://imagej.net/develop/git/notes">Git notes</a></li>
+                <li><a href="https://imagej.net/develop/git/reflogs">Git reflogs</a></li>
+                <li><a href="https://imagej.net/develop/git/submodules">Git submodules</a></li>
+                <li><a href="https://imagej.net/develop/git/pinpoint-regressions">How to pinpoint regressions</a></li>
+                <li><a href="https://imagej.net/develop/git/publish-a-repository">How to publish a git repository</a></li>
+                <li><a href="https://imagej.net/develop/git/extract-a-subproject">How to extract a subproject</a></li>
+              </ul></details></li> <!-- Extend/Development/Git -->
+            </ul></details></li> <!-- Extend/Development -->
+          </ul></details></li> <!-- Extend -->
+
+          <li><details><summary><a href="https://imagej.net/contribute">Contribute</a></summary><ul>
+            <li><a href="https://imagej.net/contribute/citing">Citing</a></li>
+            <li><a href="https://imagej.net/people">Contributors</a></li>
+            <li><a href="https://imagej.net/orgs">Organizations</a></li>
+            <li><a href="https://imagej.net/contribute/governance">Governance</a></li>
+            <li><a href="https://imagej.net/contribute/funding">Funding</a></li>
+            <li><a href="https://imagej.net/contribute/fiji">Contributing to Fiji</a></li>
+
+            <li><details><summary><a href="https://imagej.net/licensing">Licensing</a></summary><ul>
+              <li><details><summary><a href="https://imagej.net/licensing/open-source">Open Source</a></summary><ul>
+                <li><a href="https://imagej.net/licensing/apache">Apache</a></li>
+                <li><a href="https://imagej.net/licensing/bsd">BSD</a></li>
+                <li><a href="https://imagej.net/licensing/epl">EPL</a></li>
+                <li><a href="https://imagej.net/licensing/gpl">GPL</a></li>
+                <li><a href="https://imagej.net/licensing/lgpl">LGPL</a></li>
+                <li><a href="https://imagej.net/licensing/mit">MIT</a></li>
+                <li><a href="https://imagej.net/licensing/public-domain">Public domain</a></li>
+                <li><a href="https://imagej.net/licensing/big">BIG</a></li>
+              </ul></details></li> <!-- Contribute/Licensing/Open Source -->
+
+              <li><a href="https://imagej.net/licensing/closed-source">Proprietary</a></li>
+            </ul></details></li> <!-- Contribute/Licensing -->
+
+            <li><details><summary><a href="https://imagej.net/editing">Editing the Wiki</a></summary><ul>
+              <li><a href="https://imagej.net/editing/advanced">Advanced Editing</a></li>
+              <li><a href="https://imagej.net/editing/buttons">Buttons</a></li>
+              <li><a href="https://imagej.net/editing/citations">Citations</a></li>
+              <li><a href="https://imagej.net/editing/code">Source Code</a></li>
+              <li><a href="https://imagej.net/editing/debugging">Debugging</a></li>
+              <li><a href="https://imagej.net/editing/headers">Headers</a></li>
+              <li><a href="https://imagej.net/editing/icons">Icons</a></li>
+              <li><a href="https://imagej.net/editing/images">Images</a></li>
+              <li><a href="https://imagej.net/editing/keys">Keyboard Shortcuts</a></li>
+              <li><a href="https://imagej.net/editing/linking">Linking</a></li>
+              <li><a href="https://imagej.net/editing/math">Math Expressions</a></li>
+              <li><a href="https://imagej.net/editing/menu-paths">Menu Paths</a></li>
+              <li><a href="https://imagej.net/editing/navigation">Navigation</a></li>
+              <li><a href="https://imagej.net/editing/notices">Notices</a></li>
+              <li><a href="https://imagej.net/editing/people">People</a></li>
+              <li><a href="https://imagej.net/editing/pitfalls">Pitfalls</a></li>
+              <li><a href="https://imagej.net/editing/quizzes">Quizzes</a></li>
+              <li><a href="https://imagej.net/editing/statbox">Statbox</a></li>
+              <li><a href="https://imagej.net/editing/symbols">Symbols</a></li>
+              <li><a href="https://imagej.net/editing/tables">Tables</a></li>
+              <li><a href="https://imagej.net/editing/tooltips">Tooltips</a></li>
+              <li><a href="https://imagej.net/editing/videos">Videos</a></li>
+              <li><a href="https://imagej.net/editing/whitespace">Whitespace</a></li>
+            </ul></details></li> <!-- Contribute/Editing the Wiki -->
+          </ul></details></li> <!-- Contribute -->
+
+          <li><details><summary><a href="https://imagej.net/discuss">Discuss</a></summary><ul>
+            <li><a href="https://imagej.net/discuss/bugs">Reporting Issues</a></li>
+            <li><a href="https://imagej.net/discuss/mailing-lists">Mailing Lists</a></li>
+            <li><a href="https://imagej.net/discuss/chat">Chat</a></li>
+          </ul></details></li> <!-- Discuss -->
+
+          <li><details><summary>Explore</summary><ul>
+            <li><a href="https://imagej.net/news">News</a></li>
+
+            <li><details><summary><a href="https://imagej.net/events">Events</a></summary><ul>
+              <li><a href="https://imagej.net/events/presentations">Presentations</a></li>
+              <li><a href="https://imagej.net/events/conferences">Conferences</a></li>
+              <li><a href="https://imagej.net/events/hackathons">Hackathons</a></li>
+              <li><a href="https://imagej.net/events">More...</a></li>
+            </ul></details></li> <!-- Discuss/Events -->
+
+            <li><details><summary><a href="https://imagej.net/libs">Libraries</a></summary><ul>
+              <li><a href="https://imagej.net/libs/imagej-ops">ImageJ Ops</a></li>
+              <li><a href="https://imagej.net/libs/imagej-common">ImageJ Common</a></li>
+              <li><a href="https://imagej.net/libs/imagej-legacy">ImageJ Legacy</a></li>
+              <li><a href="https://imagej.net/libs/scijava">SciJava</a></li>
+              <li><a href="https://imagej.net/libs/scifio">SCIFIO</a></li>
+
+              <li><details><summary><a href="https://imagej.net/libs/imglib2">ImgLib2</a></summary><ul>
+                <li><a href="https://imagej.net/libs/imglib2/getting-started">Getting Started</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/accessors">Accessors</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/accessibles">Accessibles</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/examples">Examples</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/workshop-introductory">Introductory Workshop</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/workshop-advanced">Advanced Workshop</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/matlab">ImgLib2 images in MATLAB</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/benchmarks">Benchmarks</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/faq">FAQ</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/developing">Developing ImgLib2</a></li>
+                <li><a href="https://imagej.net/libs/imglib2/discussion">ImgLib2 Discussion</a></li>
+              </ul></details></li> <!-- Explore/Libraries/ImgLib2 -->
+              
+              <li><a href="https://imagej.net/libs">More...</a></li>
+            </ul></details></li> <!-- Explore/Libraries -->
+
+            <li><details><summary><a href="https://imagej.net/software">Software</a></summary><ul>
+              <li><a href="https://imagej.net/software/nih-image">NIH Image</a></li>
+              <li><a href="https://imagej.net/software/imagej">ImageJ</a></li>
+              <li><a href="https://imagej.net/software/imagej2">ImageJ2</a></li>
+              <li><a href="https://imagej.net/software/fiji">Fiji</a></li>
+              <li><a href="https://imagej.net/software">More...</a></li>
+            </ul></details></li> <!-- Explore/Software -->
+          </ul></details></li> <!-- Explore -->
+        </ul>
+      </div>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="dock-overlay-left" class="dock-overlay" data-dock-target="left-column"></div>
+    <div id="dock-overlay-right" class="dock-overlay" data-dock-target="right-column"></div>
+
+    <!-- Search results -->
+    <div id="search-results">
+  <div id="search-hits"><div><div class="ais-Hits"><ol class="ais-Hits-list"><li class="ais-Hits-item"><a href="https://imagej.net/licensing/lgpl"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> GNU Lesser General Public License </div> <div class="hit-description"> The GNU Lesser General Public License (LGPL) is a free, open source license for software and other kinds of works. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/closed-source"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> Why Closed-Source Is Wrong </div> <div class="hit-description"> This page has a few war stories about having to fight with developing software where you should not need to fight. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/gpl"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> GNU General Public License </div> <div class="hit-description"> The GNU General Public License (GPL) is a free, open source license for software and other kinds of works. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/apache"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> Apache Software License </div> <div class="hit-description">
+ The Apache License is a permissive free software license, imposing 
+minimal restrictions on the redistribution of covered software. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/imaging/detect-information-loss"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/Laboratory_-_The_Noun_Project.svg"> <div class="hit-title"> Detect Information Loss </div> <div class="hit-description"> How to detect various forms of information loss in images </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/epl"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> Eclipse Public License </div> <div class="hit-description"> The Eclipse Public License (EPL) is a free, open source software license. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/imaging/color-image-processing"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/Laboratory_-_The_Noun_Project.svg"> <div class="hit-title"> Color Image Processing </div> <div class="hit-description"> Images with color come in three different forms: pseudo-color, 24-bit RGB image, or color composite image. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/open-source"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> Why Open Source? </div> <div class="hit-description"> This page highlights the benefits of open source software. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/big"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> BIG Licensing </div> <div class="hit-description">
+ Components distributed via the BIG-EPFL update site were developed by 
+the Biomedical Imaging Group (BIG) at the École Polytechnique Fédérale 
+de Lausanne (EPFL). </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/public-domain"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> Public Domain </div> <div class="hit-description">
+ Software in the public domain disclaims all copyright interest, being 
+freely available to everyone for any purpose, with no attribution or 
+acknowledgement required. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/imaging/deconvolution"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/Laboratory_-_The_Noun_Project.svg"> <div class="hit-title"> Deconvolution </div> <div class="hit-description">
+ corrects the systematic error of blur (loss of contrast in smaller 
+features) in optical systems such as fluorescence microscopy images. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/imaging/visualization"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/Laboratory_-_The_Noun_Project.svg"> <div class="hit-title"> Visualization </div> <div class="hit-description">
+ is a set of techniques for graphically illustrating scientific data, 
+enabling scientists to better understand, illustrate, and glean insight 
+from their data. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/bsd"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> BSD Licenses </div> <div class="hit-description">
+ BSD licenses are a family of permissive free software licenses, 
+imposing minimal restrictions on the redistribution of covered software.
+ </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/imaging/voxelization"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/Laboratory_-_The_Noun_Project.svg"> <div class="hit-title"> Voxelization </div> <div class="hit-description">
+ Voxelization is the process of converting a data structures that store 
+geometric information in a continuous domain (such as a 3D triangular 
+mesh) into a rasterized image (a discrete grid). </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/mit"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> MIT License </div> <div class="hit-description">
+ The MIT License is a permissive free software license, imposing minimal
+ restrictions on the redistribution of covered software. </div> </div> </a></li><li class="ais-Hits-item"><a href="https://imagej.net/licensing/index"> <div class="search-result"> <img class="hit-icon" src="Grid_Collection%20Stitching%20Plugin_files/CopyrightImg.svg"> <div class="hit-title"> Licensing </div> <div class="hit-description"> This page describes the legal structure of ImageJ and SciJava projects. </div> </div> </a></li></ol></div></div></div>
+  <div id="pagination"><div class="ais-Pagination"><ul class="ais-Pagination-list"><li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled"><span class="ais-Pagination-link">«</span></li><li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled"><span class="ais-Pagination-link">‹</span></li><li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"><a class="ais-Pagination-link" aria-label="1" href="#">1</a></li><li class="ais-Pagination-item ais-Pagination-item--page"><a class="ais-Pagination-link" aria-label="2" href="#">2</a></li><li class="ais-Pagination-item ais-Pagination-item--page"><a class="ais-Pagination-link" aria-label="3" href="#">3</a></li><li class="ais-Pagination-item ais-Pagination-item--page"><a class="ais-Pagination-link" aria-label="4" href="#">4</a></li><li class="ais-Pagination-item ais-Pagination-item--page"><a class="ais-Pagination-link" aria-label="5" href="#">5</a></li><li class="ais-Pagination-item ais-Pagination-item--page"><a class="ais-Pagination-link" aria-label="6" href="#">6</a></li><li class="ais-Pagination-item ais-Pagination-item--page"><a class="ais-Pagination-link" aria-label="7" href="#">7</a></li><li class="ais-Pagination-item ais-Pagination-item--nextPage"><a class="ais-Pagination-link" aria-label="Next" href="#">›</a></li><li class="ais-Pagination-item ais-Pagination-item--lastPage"><a class="ais-Pagination-link" aria-label="Last" href="#">»</a></li></ul></div></div>
+</div>
+
+    <!-- Scripts -->
+    <!-- Libraries -->
+<script src="Grid_Collection%20Stitching%20Plugin_files/jquery.min.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/jquery.scrolly.min.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/browser.min.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/breakpoints.min.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/util.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/jquery.toc.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/lightbox.min.js"></script>
+<!-- Extensions -->
+
+<!-- Site code -->
+<script src="Grid_Collection%20Stitching%20Plugin_files/main.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/dock.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/code.js"></script>
+<!-- Anchors -->
+<script src="Grid_Collection%20Stitching%20Plugin_files/anchor.min.js"></script>
+<script>anchors.add('#page h1, #page h2, #page h3, #page h4, #page h5, #page h6');</script>
+<!-- Citations -->
+<script src="Grid_Collection%20Stitching%20Plugin_files/citation-js@0.4.0-9"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/cite.js"></script>
+<!-- Search -->
+<script src="Grid_Collection%20Stitching%20Plugin_files/algoliasearch-lite.umd.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/instantsearch.production.min.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/search.js"></script>
+<script src="Grid_Collection%20Stitching%20Plugin_files/search-tweaks.js"></script>
+  
+
+<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay" style="display: none;"></div><div id="lightbox" tabindex="-1" class="lightbox" style="display: none;"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""><div class="lb-nav"><a class="lb-prev" aria-label="Previous image" href=""></a><a class="lb-next" aria-label="Next image" href=""></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div></body></html>

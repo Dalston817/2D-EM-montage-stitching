@@ -1,13 +1,31 @@
-% David C Alston 3-12-2025 david.alston@louisville.edu
-% Build a 2D tile configuration text file based on PieceCoordinates as read
-% from an mdoc or idoc file.
-% For use with FIJI grid stitching plugin
+%{
+% build2DTileConfigForStitchingFromDOC.m
+%
+% PURPOSE: Build a 2D tile configuration text file based on PieceCoordinates as read
+%   from an mdoc or idoc file. For use with FIJI grid stitching plugin.
+%
+% INPUTS: A folder containing the tifs to stitch plus one .mdoc or .idoc
+%      file. Assumes these are named just as numbers (0001.tif, 0002.tif, etc).
+%
+% OUTPUTS: A custom tile config text file for use with the FIJI grid
+%   stitching plugin.
+%
+% DEPENDENCIES: Basic MATLAB install (built/tested on R2024a but may work
+% 	on earlier versions). Tested on Windows 11.
+%
+% AUTHOR: David C Alston (david.alston@louisville.edu) June 2025.
+%
+% NOTES:
+%   - More info on the FIJI grid stitching plugin:
+%       -- https://github.com/fiji/Stitching
+%       -- https://imagej.net/plugins/grid-collection-stitching
+%}
 clc
 close all
 clear
 %% Select folder with tifs and and one .mdoc or .idoc file
 [inputPath] = uigetdir('', 'Select path containing tifs plus idoc/mdoc');
-docFiles = [dir(strcat(inputPath, '/*.idoc'));dir(strcat(inputPath, '/*.mdoc'))]; % TODO this will only work on Windows, change to general solution
+docFiles = [dir(strcat(inputPath, '/*.idoc'));dir(strcat(inputPath, '/*.mdoc'))];
 if numel(docFiles) > 1
     beep;
     fprintf("ERROR::More than 1 idoc/mdoc file found in folder. Check input folder");
