@@ -33,15 +33,15 @@ close all
 clear
 %% Select folder with tifs and and one .mdoc or .idoc file
 [inputPath] = uigetdir('', 'Select path containing tifs plus one .mdoc/.idoc file');
-docFiles = [dir(strcat(inputPath, '/*.idoc'));dir(strcat(inputPath, '/*.mdoc'))];
+docFiles = [dir(strcat(inputPath, '/*.idoc*'));dir(strcat(inputPath, '/*.mdoc*'))];
 if numel(docFiles) > 1
     beep;
-    fprintf("ERROR::More than 1 idoc/mdoc file found in folder. Check input folder.");
+    fprintf("ERROR::More than 1 idoc/mdoc file found in folder. Check input folder.\n");
     return
 end
 if numel(docFiles) == 0
     beep;
-    fprintf("ERROR::No idoc/mdoc files found in folder. Check input folder.");
+    fprintf("ERROR::No idoc/mdoc files found in folder. Check input folder.\n");
 end
 docFullpath = fullfile(docFiles(1).folder, docFiles(1).name);
 %% Search input folder for tifs (assuming at least 2)
@@ -49,7 +49,7 @@ allTifs = dir(fullfile(inputPath, '*.tif'));
 allTifs([allTifs.isdir].') = []; % Remove folders
 if numel(allTifs) < 2
     beep;
-    fprintf("ERROR::Less than two tif files found. Cannot build 2D tile configuration. Check input folder.");
+    fprintf("ERROR::Less than two tif files found. Cannot build 2D tile configuration. Check input folder.\n");
     return
 end
 fprintf('INFO::Found %i tif tiles in folder. Check these are in order below:\n', numel(allTifs));
